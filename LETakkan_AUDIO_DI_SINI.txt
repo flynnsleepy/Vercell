@@ -1,0 +1,10 @@
+Letakkan file audio kamu di folder ini dengan nama persis:
+voice-note.mp3
+
+Susunan folder:
+Voice_Note_Nuza/
+├── index.html
+├── voice-note.mp3       <-- masukkan audio kamu di sini
+└── LETakkan_AUDIO_DI_SINI.txt
+
+Kalau file audio kamu formatnya bukan MP3, konversi ke MP3 atau ubah nama/format file dan sesuaikan konstanta VOICE_NOTE_FILE di index.html.

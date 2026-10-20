@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VM
+</title>
+<style>
+:root{--wine:#5b1019;--wine2:#741b27;--cream:#fff0d7;--pink:#f4c7cb;--ink:#3b1116}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--wine);color:var(--cream);font-family:Georgia,'Times New Roman',serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.14;background-image:radial-gradient(#f4c7cb .7px,transparent .7px);background-size:18px 18px}
+button,input{font:inherit}.screen{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative}
+.panel{width:min(100%,440px);text-align:center;border:1px solid #a85d62;background:linear-gradient(145deg,#711923,#480a12);padding:clamp(26px,7vw,48px) 25px;box-shadow:0 24px 80px #26060a55}
+.eyebrow{font:10px Arial,sans-serif;letter-spacing:3px;text-transform:uppercase;color:#e9b7b9}
+h1{font-size:clamp(2.8rem,10vw,4.7rem);font-weight:400;font-style:italic;line-height:.95;margin:22px 0}
+p{font-size:14px;line-height:1.8;color:#f3d8d4}.seal{width:90px;height:90px;border:1px solid #dba6a5;border-radius:50%;display:grid;place-items:center;margin:25px auto;font-size:2.7rem;box-shadow:0 0 0 7px #5b1019,0 0 0 8px #9a5158}
+input[type=password],input[type=text]{width:100%;background:#4b0b13;color:#fff0d7;border:1px solid #a85d62;padding:14px;margin:10px 0;outline:none;text-align:center;letter-spacing:2px}
+input:focus{border-color:#f2c8c5}.primary{border:1px solid #f2c8c5;background:var(--cream);color:var(--wine);padding:14px 20px;width:100%;margin-top:10px;letter-spacing:1px;transition:.2s}.primary:hover{transform:translateY(-2px)}
+.error{min-height:18px;color:#ffb8bd;font:12px Arial,sans-serif;margin-top:12px}.hint{font:10px Arial,sans-serif;letter-spacing:1px;color:#dba6a5;margin-top:17px}
+#voiceScreen{display:none}.voice-panel{width:min(100%,560px);text-align:center;border:1px solid #a85d62;background:linear-gradient(145deg,#711923,#480a12);padding:clamp(25px,7vw,48px) 22px;box-shadow:0 24px 80px #26060a55}
+.voice-title{font-size:clamp(2.6rem,9vw,4.6rem);font-style:italic;font-weight:400;line-height:1;margin:20px 0}
+.orb{height:150px;width:150px;border:1px solid #dba6a5;border-radius:50%;margin:28px auto;display:grid;place-items:center;position:relative;background:#5b1019;box-shadow:0 0 0 8px #5b1019,0 0 0 9px #9a5158}
+.orb:before,.orb:after{content:"";position:absolute;inset:12px;border:1px solid #dba6a555;border-radius:50%}.orb:after{inset:25px}
+.play{border:0;background:var(--cream);color:var(--wine);width:60px;height:60px;border-radius:50%;font-size:22px;position:relative;z-index:1}
+audio{width:100%;margin:22px 0 5px;accent-color:#e9b8b8}.hidden{display:none!important}
+footer{font:9px Arial,sans-serif;letter-spacing:2px;color:#c58a8e;margin-top:25px}
+</style>
+</head>
+<body>
+<section class="screen" id="lockScreen">
+ <div class="panel">
+  <div class="eyebrow">yg know know aja</div>
+  <div class="seal">♡</div>
+  <p>Angka Favoritemu</p>
+  <form id="passwordForm">
+   <input id="password" type="password" placeholder="ENTER PASSWORD" autocomplete="off" aria-label="Password" required>
+   <button class="primary" type="submit">Pencet</button>
+  </form>
+  <div class="error" id="error"></div>
+  <div class="hint">Azza</div>
+ </div>
+</section>
+<section class="screen" id="voiceScreen">
+ <div class="voice-panel">
+  <div class="eyebrow">dengerin tanpa secara pelan dan pasti</div>
+  <div class="orb"><button class="play" id="playBtn" aria-label="Play voice note">▶</button></div>
+  <p>maaf kalo dari ada kesannya agak gimana, karna emang aku sebisa mungkin cepet ngasih hal in ke kamu dan maaf kalo kedengerannya Hopeless/Lemes, jujur aku lagi lemah bgt, yaa idk.</p>
+  <audio id="voice" controls preload="metadata"></audio>
+  <footer>Thanks for your attention kak azza, and see u later.</footer>
+ </div>
+</section>
+<script>
+/* Customize these values before sharing the website. */
+const ACCESS_PASSWORD = "12"; // Ganti dengan password yang kamu inginkan
+const VOICE_NOTE_FILE = "voice-note.mp3"; // Letakkan file audio dengan nama ini di folder yang sama dengan HTML
+
+const form=document.getElementById('passwordForm');
+const passwordInput=document.getElementById('password');
+const error=document.getElementById('error');
+const voice=document.getElementById('voice');
+const playBtn=document.getElementById('playBtn');
+voice.src=VOICE_NOTE_FILE;
+form.addEventListener('submit',e=>{
+ e.preventDefault();
+ if(passwordInput.value===ACCESS_PASSWORD){
+  document.getElementById('lockScreen').classList.add('hidden');
+  document.getElementById('voiceScreen').style.display='flex';
+  error.textContent='';
+  // Browser may block autoplay with sound. Show the player and let them press play.
+  voice.play().then(()=>playBtn.textContent='Ⅱ').catch(()=>{});
+ }else{
+  error.textContent='Password-nya belum tepat. Coba lagi ya ♡';
+  passwordInput.value='';passwordInput.focus();
+ }
+});
+playBtn.addEventListener('click',()=>{
+ if(voice.paused){voice.play().then(()=>playBtn.textContent='Ⅱ').catch(()=>{});}
+ else{voice.pause();playBtn.textContent='▶';}
+});
+voice.addEventListener('play',()=>playBtn.textContent='Ⅱ');
+voice.addEventListener('pause',()=>playBtn.textContent='▶');
+voice.addEventListener('ended',()=>playBtn.textContent='▶');
+</script>
+</body>
+</html>
